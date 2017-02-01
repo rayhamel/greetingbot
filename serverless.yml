@@ -16,28 +16,28 @@ provider:
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/friends
 
 functions:
-  getBare:
-    handler: handler.getBare
+  greetStranger:
+    handler: greeting/greetStranger.greetStranger
     events:
       - http: GET greeting
   hello:
-    handler: handler.hello
+    handler: greeting/hello.hello
     events:
       - http: GET greeting/{name}
-  putBare:
-    handler: handler.putBare
+  notIntroduced:
+    handler: greeting/notIntroduced.notIntroduced
     events:
       - http: PUT greeting
   introduce:
-    handler: handler.introduce
+    handler: greeting/introduce.introduce
     events:
       - http: PUT greeting/{name}
-  deleteBare:
-    handler: handler.deleteBare
+  bidStrangerGoodbye:
+    handler: greeting/bidStrangerGoodbye.bidStrangerGoodbye
     events:
       - http: DELETE greeting
   goodbye:
-    handler: handler.goodbye
+    handler: greeting/goodbye.goodbye
     events:
       - http: DELETE greeting/{name}
 
