@@ -28,7 +28,9 @@ function greet(name) {
     `What\'s happening${name}?`,
     `What\'s up${name}?`,
   ];
-  return greetings[Math.floor(Math.random() * greetings.length)];
+  return `{"message":"${
+    greetings[Math.floor(Math.random() * greetings.length)]
+  }"}`;
 }
 
 function farewell(name) {
@@ -55,16 +57,27 @@ function farewell(name) {
     `Ta-ta${name}!`,
     `Toodle-oo${name}!`,
   ];
-  return farewells[Math.floor(Math.random() * farewells.length)];
+  return `{"message":"${
+    farewells[Math.floor(Math.random() * farewells.length)]
+  }"}`;
 }
 
-module.exports.getBare = (event, context, callback) => callback(null, {body: greet(), statusCode: 200});
+module.exports.getBare = (event, context, callback) => {
+  callback(null, {body: greet(), statusCode: 200});
+};
 
 module.exports.hello = (event, context, callback) => {
-  db.get({Key: {name: event.pathParameters.name}, TableName: 'friends'}, (err, result) => {
+  const name = event.pathParameters.name;
+  db.get({Key: {name}, TableName: 'friends'}, (err, result) => {
     if (err) return callback(err);
-    callback(null, {body: result.Item && result.Item.greeting || greet(), statusCode: 200});
+    const body = result.Item && result.Item.greeting || greet();
+    callback(null, {body, statusCode: 200});
   });
+};
+
+module.exports.putBare = (event, context, callback) => {
+  callback(null, {body: '{"message":"I didn\'t catch your name…"}',
+                  statusCode: 200});
 };
 
 module.exports.introduce = (event, context, callback) => {
@@ -72,11 +85,14 @@ module.exports.introduce = (event, context, callback) => {
   const params = {Item: {greeting: greet(name), name}, TableName: 'friends'};
   db.put(params, (err, result) => {
     if (err) return callback(err);
-    callback(null, {body: `Nice to meet you, ${name}!`, statusCode: 200});
+    callback(null, {body: `{"message":"Nice to meet you, ${name}!"}`,
+                    statusCode: 200});
   });
 };
 
-module.exports.goodbyeAnon = (event, context, callback) => callback(null, {body: farewell(), statusCode: 200});
+module.exports.deleteBare = (event, context, callback) => {
+  callback(null, {body: farewell(), statusCode: 200});
+};
 
 module.exports.goodbye = (event, context, callback) => {
   const name = event.pathParameters.name;

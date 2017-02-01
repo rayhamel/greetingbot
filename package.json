@@ -11,7 +11,7 @@
   "engines": {
     "node": "~4.3.2"
   },
-  "homepage": "https://38t9rqea4h.execute-api.us-east-1.amazonaws.com/dev/greeting",
+  "homepage": "https://0bpeq8qguj.execute-api.us-east-1.amazonaws.com/dev/greeting",
   "license": "UNLICENSED",
   "name": "greetingbot",
   "private": true,
