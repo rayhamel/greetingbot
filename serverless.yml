@@ -1,68 +1,67 @@
 service: greeterbot
 
 provider:
-  name: aws
-  runtime: nodejs4.3
-  profile: rayh
   iamRoleStatements:
-    - Effect: Allow
-      Action:
+    - Action:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+      Effect: Allow
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/friends
+  name: aws
+  profile: rayh
+  runtime: nodejs4.3
 
 functions:
+  bidStrangerGoodbye:
+    events:
+      - http:
+          cors: true
+          method: delete
+          path: greeting
+    handler: greeting/bidStrangerGoodbye.bidStrangerGoodbye
+  goodbye:
+    events:
+      - http:
+          cors: true
+          method: delete
+          path: greeting/{name}
+    handler: greeting/goodbye.goodbye
   greetStranger:
-    handler: greeting/greetStranger.greetStranger
     events:
       - http:
           cors: true
           method: get
           path: greeting
+    handler: greeting/greetStranger.greetStranger
   hello:
-    handler: greeting/hello.hello
     events:
       - http:
           cors: true
           method: get
           path: greeting/{name}
-  notIntroduced:
-    handler: greeting/notIntroduced.notIntroduced
-    events:
-      - http:
-          cors: true
-          method: put
-          path: greeting
+    handler: greeting/hello.hello
   introduce:
-    handler: greeting/introduce.introduce
     events:
       - http: 
           cors: true
           method: put
           path: greeting/{name}
-  bidStrangerGoodbye:
-    handler: greeting/bidStrangerGoodbye.bidStrangerGoodbye
+    handler: greeting/introduce.introduce
+  notIntroduced:
     events:
       - http:
           cors: true
-          method: delete
+          method: put
           path: greeting
-  goodbye:
-    handler: greeting/goodbye.goodbye
-    events:
-      - http:
-          cors: true
-          method: delete
-          path: greeting/{name}
+    handler: greeting/notIntroduced.notIntroduced
 
 resources:
   Resources:
     friendsTable:
-      Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: name
@@ -74,3 +73,4 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: friends
+      Type: AWS::DynamoDB::Table
