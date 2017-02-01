@@ -1,0 +1,23 @@
+{
+  "author": {
+    "email": "rhamel@ptc.com",
+    "name": "Ray Hamel",
+    "url": "https://github.com/rayhamel"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.7.20",
+    "serverless": "^1.4.0"
+  },
+  "engines": {
+    "node": "~4.3.2"
+  },
+  "homepage": "https://38t9rqea4h.execute-api.us-east-1.amazonaws.com/dev/greeting",
+  "license": "UNLICENSED",
+  "name": "greetingbot",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rayhamel/greetingbot"
+  },
+  "version": "0.0.0"
+}

@@ -1,0 +1,54 @@
+service: greeterbot
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  profile: rayh
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/greetings
+
+functions:
+  getBare:
+    handler: handler.getBare
+    events:
+      - http: GET greeting
+  hello:
+    handler: handler.hello
+    events:
+      - http: GET greeting/{name}
+  introduce:
+    handler: handler.introduce
+    events:
+      - http: PUT greeting/{name}
+  deleteBare:
+    handler: handler.deleteBare
+    events:
+      - http: DELETE greeting
+  goodbye:
+    handler: handler.goodbye
+    events:
+      - http: DELETE greeting/{name}
+
+resources:
+  Resources:
+    friendsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: friends
