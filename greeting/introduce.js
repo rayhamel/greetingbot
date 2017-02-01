@@ -13,7 +13,7 @@ module.exports.introduce = (event, context, callback) => {
             callback(err);
             return;
         }
-        const welcome = data.Attributes ? 'We meet again' : 'Nice to meet you';
+        const welcome = data.Attributes ? "We meet again" : "Nice to meet you";
         callback(null, {body: greeterMsg(`${welcome}, ${name}!`),
                         statusCode: 200});
     });
