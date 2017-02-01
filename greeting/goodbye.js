@@ -1,8 +1,7 @@
 "use strict";
 
+const db       = require("../helpers/db");
 const farewell = require("../helpers/farewell");
-const AWS = require("aws-sdk");
-const db = new AWS.DynamoDB.DocumentClient();
 
 module.exports.goodbye = (event, context, callback) => {
     const name = event.pathParameters.name;
