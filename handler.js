@@ -3,6 +3,10 @@
 const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
+function greeterMsg(message) {
+    return JSON.stringify({message});
+}
+
 function greet(name) {
     name = name ? `, ${name}` : "";
     const greetings = [
@@ -28,9 +32,7 @@ function greet(name) {
         `What's happening${name}?`,
         `What's up${name}?`,
     ];
-    return `{"message":"${
-        greetings[Math.floor(Math.random() * greetings.length)]
-    }"}`;
+    return greeterMsg(greetings[Math.floor(Math.random() * greetings.length)]);
 }
 
 function farewell(name) {
@@ -57,9 +59,7 @@ function farewell(name) {
         `Ta-ta${name}!`,
         `Toodle-oo${name}!`,
     ];
-    return `{"message":"${
-        farewells[Math.floor(Math.random() * farewells.length)]
-    }"}`;
+    return greeterMsg(farewells[Math.floor(Math.random() * farewells.length)]);
 }
 
 module.exports.getBare = (event, context, callback) => {
@@ -79,7 +79,7 @@ module.exports.hello = (event, context, callback) => {
 };
 
 module.exports.putBare = (event, context, callback) => {
-    callback(null, {body: `{"message":"I didn't catch your name…"}`,
+    callback(null, {body: greeterMsg("I didn't catch your name…"),
                     statusCode: 200});
 };
 
@@ -91,7 +91,7 @@ module.exports.introduce = (event, context, callback) => {
             callback(err);
             return;
         }
-        callback(null, {body: `{"message":"Nice to meet you, ${name}!}"`,
+        callback(null, {body: greeterMsg(`Nice to meet you, ${name}!`),
                         statusCode: 200});
     });
 };
